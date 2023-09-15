@@ -6,7 +6,7 @@
 /*   By: nrossel <nrossel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 09:52:50 by nrossel           #+#    #+#             */
-/*   Updated: 2023/09/12 14:49:00 by nrossel          ###   ########.fr       */
+/*   Updated: 2023/09/15 19:54:29 by nrossel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,27 @@ long long	timestamp(void)
 }
 
 /* ----------- 2.Personal usleep ----------- */
-void	ft_usleep(long long microseconds)
+void	ft_msleep(long long milliseconds, t_god *info)
 {
 	long long	start;
 
 	start = timestamp();
-	while (timestamp() < start + microseconds)
-		usleep(10);
+	
+	pthread_mutex_lock(&(info->check_meal));
+	if (info->dead)
+	{
+		pthread_mutex_unlock(&(info->check_meal));
+		return ;
+	}
+	pthread_mutex_unlock(&(info->check_meal));
+	while (timestamp() < start + milliseconds)
+		usleep(500);
 }
 
 /* ----------- 3.Microseconds checker for time ----------- */
 int	ms_checker(int death, int sleep, int eat)
 {
-	if (death <= 60 || sleep <= 60 || eat <= 60 )
+	if (death <= 60 || sleep <= 60 || eat <= 60)
 		return (ERROR);
 	return (SUCCESS);
 }

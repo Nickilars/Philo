@@ -6,7 +6,7 @@
 /*   By: nrossel <nrossel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 10:26:42 by nrossel           #+#    #+#             */
-/*   Updated: 2023/09/12 14:14:11 by nrossel          ###   ########.fr       */
+/*   Updated: 2023/09/13 14:57:21 by nrossel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	init(t_god *info, char **av, int ac)
 	info->time_eat = ft_atoi(av[2]);
 	info->time_sleep = ft_atoi(av[3]);
 	if (ms_checker(info->time_death, info->time_eat, info->time_sleep)
-		|| !(info->nb_philo))
+		|| !(info->nb_philo) || info->nb_philo > 200)
 		return (2);
 	info->dead = 0;
 	info->all_philo_eaten = 0;
@@ -66,13 +66,12 @@ static int	init_mutex(t_god *info)
 	i = info->nb_philo;
 	while (--i >= 0)
 	{
-		if (pthread_mutex_init(&(info->fork[i]), NULL))// --> Mutex initialiser
+		if (pthread_mutex_init(&(info->fork[i]), NULL))
 			return (ERROR);
 	}
-	if (pthread_mutex_init(&(info->check_meal), NULL))// --> Mutex initialiser
+	if (pthread_mutex_init(&(info->check_meal), NULL))
 		return (ERROR);
-	if (pthread_mutex_init(&(info->write), NULL))// --> Mutex initialiser
+	if (pthread_mutex_init(&(info->write), NULL))
 		return (ERROR);
 	return (SUCCESS);
 }
-

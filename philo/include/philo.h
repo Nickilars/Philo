@@ -6,7 +6,7 @@
 /*   By: nrossel <nrossel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 11:03:52 by nrossel           #+#    #+#             */
-/*   Updated: 2023/09/12 15:54:58 by nrossel          ###   ########.fr       */
+/*   Updated: 2023/09/15 19:53:47 by nrossel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,10 @@
 
 /* ----------- STRUCTURES ----------- */
 /* ----------- Main structure ----------- */
-struct s_god;
-
+struct	s_god;
 
 /* ----------- philo structure ----------- */
-typedef struct 	s_philo
+typedef struct s_philo
 {
 	int				philo_id;
 	int				r_fork_id;
@@ -53,7 +52,7 @@ typedef struct 	s_philo
 	struct s_god	*god;
 }	t_philo;
 
-typedef struct	s_god
+typedef struct s_god
 {
 	int				nb_philo;
 	int				time_death;
@@ -62,12 +61,12 @@ typedef struct	s_god
 	int				x_meal;
 	int				dead;
 	int				all_philo_eaten;
-	long long 		start_proc;
+	long long		start_proc;
 	pthread_mutex_t	fork[250];
 	pthread_mutex_t	check_meal;
 	pthread_mutex_t	write;
 	t_philo			philo[250];
-} t_god;
+}	t_god;
 
 /* ----------- FUNCTIONS ----------- */
 int			start_threads(t_god *info);
@@ -87,7 +86,7 @@ int			ms_checker(int death, int sleep, int eat);
 long long	timestamp(void);
 long long	passing_time(long long past, long long present);
 
-void		ft_usleep(long long microseconds);
+void		ft_msleep(long long microseconds, t_god *info);
 
 /* ----------- Errors ----------- */
 int			error_msg(char *(str));
@@ -103,5 +102,6 @@ void		print_action(t_god *info, int id, char *action);
 void		show_philo_struct(t_philo *philo);
 void		print_time(t_god *info);
 void		print_struct(t_philo *philo);
+void		print_current_time(long long past, char *ft);
 
 #endif

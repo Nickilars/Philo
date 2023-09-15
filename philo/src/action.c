@@ -6,7 +6,7 @@
 /*   By: nrossel <nrossel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:14:16 by nrossel           #+#    #+#             */
-/*   Updated: 2023/09/12 15:59:50 by nrossel          ###   ########.fr       */
+/*   Updated: 2023/09/15 20:00:38 by nrossel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	eat_philo(t_philo *philo)
 	t_god	*info;
 
 	info = philo->god;
-
 	if (info->nb_philo == 1)
 	{
 		if_one_philo(info);
@@ -34,9 +33,10 @@ void	eat_philo(t_philo *philo)
 	pthread_mutex_lock(&(info->check_meal));
 	print_action(info, philo->l_fork_id, ""GREEN"is eating"RESET"");
 	philo->last_time_eat = timestamp();
+	// print_time(info);
+	philo->x_eat++;
 	pthread_mutex_unlock(&(info->check_meal));
 	sleep_philo(info->time_eat, info);
-	philo->x_eat++;
 	pthread_mutex_unlock(&(info->fork[philo->l_fork_id]));
 	pthread_mutex_unlock(&(info->fork[philo->r_fork_id]));
 }
@@ -57,20 +57,21 @@ static void	if_one_philo(t_god *info)
 /*----------- 2.Sleep ---------------*/
 void	sleep_philo(long long time, t_god *info)
 {
-	long long	c_t;
+	long long	current_time;
+	(void) info;
 
-	c_t = timestamp();
-	while (1)
+	current_time = timestamp();
+	// while (1)
+	// {
+	ft_msleep(time, info);
+	pthread_mutex_lock(&(info->check_meal));
+	if (info->dead)
 	{
-		pthread_mutex_lock(&(info->check_meal));
-		if (info->dead)
-		{
-			pthread_mutex_unlock(&(info->check_meal));
-			break ;
-		}
 		pthread_mutex_unlock(&(info->check_meal));
-		if (passing_time(c_t, timestamp()) >= time)
-			break ;
-		ft_usleep(50);
+		return ;
 	}
+	pthread_mutex_unlock(&(info->check_meal));
+	if (passing_time(current_time, timestamp()) >= time)
+		return ;
+	// }
 }
